@@ -1,0 +1,36 @@
+OSRM SETUP
+
+Install and setup Docker
+
+Open Command Prompt
+1. Go to .osrm.pbf folder
+2. docker --version
+3. wsl --version 
+	if error occurs,
+		wsl --install
+		wsl --update 
+4. wsl --set-default-version 2
+	check the version
+		wsl --status
+5. Pull the image
+	docker pull osrm/osrm-backend:latest
+6. Extract the image
+	docker run -t -v "<Path to folder of .osrm.pbf file>:/data" osrm/osrm-backend:latest osrm-extract -p /opt/car.lua /data/new-york-latest.osm.pbf
+
+7. Partition the image
+	docker run -t -v "<Path to folder of .osrm.pbf file>:/data" osrm/osrm-backend:latest osrm-partition /data/new-york-latest.osrm
+
+8. Costumize the image
+	docker run -t -v "<Path to folder of .osrm.pbf file>:/data" osrm/osrm-backend:latest osrm-customize /data/new-york-latest.osrm
+
+9. Contract the image
+	docker run -t -v "<Path to folder of .osrm.pbf file>:/data" osrm/osrm-backend:latest osrm-contract /data/new-york-latest.osrm
+
+10. docker run -d -t -i -p 5000:5000 -v <Path to folder of .osrm.pbf file>:/data" osrm/osrm-backend:latest osrm-routed /data/new-york-latest.osrm
+
+11. Check for running docker
+	docker ps
+	docker logs <container_id>
+
+12. Check for the output distance and duration
+curl "http://localhost:5000/route/v1/driving/-73.985130,40.758896;-73.991904,40.733815?overview=false"
